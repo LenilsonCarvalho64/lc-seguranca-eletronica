@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://lcsegurancaeletronica.com.br/sitemap.xml
