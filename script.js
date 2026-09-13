@@ -1,18 +1,37 @@
-function hydrateImages() {
-  const assets = window.LC_ASSETS || {};
-  document.querySelectorAll('[data-img]').forEach((img) => {
-    const src = assets[img.dataset.img];
-    if (src) img.src = src;
-  });
-  return assets;
-}
-
-const LC_ASSETS = hydrateImages();
-
 const PHONE = '5586994172684';
 const DEFAULT_MESSAGE = 'Olá, vim pelo site da LC Segurança Eletrônica e gostaria de solicitar um orçamento em Barras-PI ou região.';
 
 const whatsappUrl = (message) => `https://wa.me/${PHONE}?text=${encodeURIComponent(message)}`;
+
+function loadScript(src) {
+  return new Promise((resolve) => {
+    if (document.querySelector(`script[data-dynamic="${src}"]`)) return resolve();
+    const s = document.createElement('script');
+    s.src = src;
+    s.async = false;
+    s.dataset.dynamic = src;
+    s.onload = resolve;
+    s.onerror = resolve;
+    document.head.appendChild(s);
+  });
+}
+
+function hydrateImages() {
+  const assets = window.LC_ASSETS || {};
+
+  if (!assets.external) assets.external = assets.hero;
+  if (!assets.about) assets.about = assets.personal || assets.hero;
+  if (!assets.electrical) assets.electrical = assets.about || assets.hero;
+  if (!assets.clinic) assets.clinic = assets.lighting || assets.hero;
+  if (!assets.logoSymbol && assets.hero) assets.logoSymbol = assets.hero;
+
+  document.querySelectorAll('[data-img]').forEach((img) => {
+    const src = assets[img.dataset.img];
+    if (src) img.src = src;
+  });
+
+  return assets;
+}
 
 function setupWhatsAppLinks() {
   document.querySelectorAll('[data-whatsapp]').forEach((link) => {
@@ -107,7 +126,7 @@ function setupReveal() {
   items.forEach((item) => observer.observe(item));
 }
 
-function setupLightbox() {
+function setupLightbox(assets) {
   const dialog = document.querySelector('#lightbox');
   if (!dialog) return;
   const image = dialog.querySelector('img');
@@ -124,7 +143,7 @@ function setupLightbox() {
 
   document.querySelectorAll('.gallery-item').forEach((item) => {
     item.addEventListener('click', () => {
-      image.src = LC_ASSETS[item.dataset.full] || item.dataset.full;
+      image.src = assets[item.dataset.full] || '';
       image.alt = item.dataset.caption || 'Projeto real';
       caption.textContent = item.dataset.caption || '';
       if (typeof dialog.showModal === 'function') dialog.showModal();
@@ -132,9 +151,20 @@ function setupLightbox() {
   });
 }
 
-setupWhatsAppLinks();
-setupMenu();
-setupHeader();
-setupForm();
-setupReveal();
-setupLightbox();
+async function bootstrap() {
+  await Promise.all([
+    loadScript('asset-logo-symbol.js'),
+    loadScript('asset-personal.js'),
+    loadScript('asset-about.js')
+  ]);
+
+  const assets = hydrateImages();
+  setupWhatsAppLinks();
+  setupMenu();
+  setupHeader();
+  setupForm();
+  setupReveal();
+  setupLightbox(assets);
+}
+
+bootstrap();
