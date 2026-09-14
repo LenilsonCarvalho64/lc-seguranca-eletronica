@@ -1,5 +1,6 @@
 const PHONE = '5586994172684';
 const DEFAULT_MESSAGE = 'Olá, vim pelo site da LC Segurança Eletrônica e gostaria de solicitar um orçamento em Barras-PI ou região.';
+const ASSET_VERSION = '20260914-1648';
 
 const whatsappUrl = (message) => `https://wa.me/${PHONE}?text=${encodeURIComponent(message)}`;
 
@@ -10,11 +11,12 @@ const WHATSAPP_ICON = `
 
 function loadScript(src) {
   return new Promise((resolve) => {
-    if (document.querySelector(`script[data-dynamic="${src}"]`)) return resolve();
+    const versionedSrc = `${src}?v=${ASSET_VERSION}`;
+    if (document.querySelector(`script[data-dynamic="${versionedSrc}"]`)) return resolve();
     const s = document.createElement('script');
-    s.src = src;
+    s.src = versionedSrc;
     s.async = false;
-    s.dataset.dynamic = src;
+    s.dataset.dynamic = versionedSrc;
     s.onload = resolve;
     s.onerror = resolve;
     document.head.appendChild(s);
@@ -32,7 +34,10 @@ function hydrateImages() {
 
   document.querySelectorAll('[data-img]').forEach((img) => {
     const src = assets[img.dataset.img];
-    if (src) img.src = src;
+    if (src) {
+      img.src = src;
+      img.removeAttribute('data-load-error');
+    }
   });
 
   return assets;
