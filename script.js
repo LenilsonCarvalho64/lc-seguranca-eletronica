@@ -154,8 +154,13 @@ function setupLightbox(assets) {
 async function bootstrap() {
   await Promise.all([
     loadScript('asset-logo-symbol.js'),
+    loadScript('asset-hero.js'),
+    loadScript('asset-lighting.js'),
+    loadScript('asset-external.js'),
     loadScript('asset-personal.js'),
-    loadScript('asset-about.js')
+    loadScript('asset-about.js'),
+    loadScript('asset-electrical.js'),
+    loadScript('asset-clinic.js')
   ]);
 
   const assets = hydrateImages();
