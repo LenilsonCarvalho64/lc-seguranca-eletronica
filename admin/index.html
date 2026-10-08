@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Painel | LC Segurança Eletrônica</title>
+<link rel="stylesheet" href="admin.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../js/supabase.js" defer></script>
+<script src="../js/site-content.js" defer></script>
+<script src="admin.js" defer></script>
+</head>
+<body>
+<main class="page">
+<section id="loginView" class="card login-card">
+<div class="brand"><div class="logo">LC</div><div><strong>LC Segurança Eletrônica</strong><span>Painel administrativo</span></div></div>
+<h1>Acesso administrativo</h1>
+<p class="muted">Entre com o usuário cadastrado no Supabase.</p>
+<form id="loginForm">
+<label>E-mail<input id="email" type="email" autocomplete="email" required></label>
+<label>Senha<input id="password" type="password" autocomplete="current-password" required></label>
+<button class="primary" type="submit">Entrar</button>
+<p id="loginMessage" class="message"></p>
+</form>
+</section>
+<section id="panelView" class="hidden">
+<header class="topbar"><div><span class="eyebrow">PAINEL LC</span><h1>Gerenciar site</h1><p id="userEmail" class="muted"></p></div><div class="actions"><a class="secondary" href="../" target="_blank" rel="noopener">Ver site</a><button id="logoutButton" class="danger">Sair</button></div></header>
+<div id="panelMessage" class="message"></div>
+<section class="card"><span class="eyebrow">INFORMAÇÕES</span><h2>Dados gerais</h2>
+<form id="contentForm" class="form-grid">
+<label>Telefone / WhatsApp<input name="phone"></label><label>Localidade<input name="location"></label>
+<label class="full">Título principal<input name="hero_title"></label>
+<label class="full">Texto principal<textarea name="hero_description" rows="4"></textarea></label>
+<label class="full">Texto sobre a empresa<textarea name="about_text" rows="5"></textarea></label>
+<label>Horário de atendimento<input name="business_hours"></label><label>Instagram<input name="instagram"></label>
+<div class="full"><button class="primary" type="submit">Salvar informações</button></div>
+</form></section>
+<section class="card"><div class="section-title"><div><span class="eyebrow">SERVIÇOS</span><h2>Serviços do site</h2></div><button id="addServiceButton" class="secondary" type="button">+ Novo serviço</button></div><div id="servicesList" class="items-list"></div></section>
+<section class="card"><div class="section-title"><div><span class="eyebrow">PROJETOS</span><h2>Projetos e fotos</h2></div><button id="addProjectButton" class="secondary" type="button">+ Novo projeto</button></div><p class="muted small">Nesta etapa a foto é cadastrada por URL. O upload direto será acrescentado depois.</p><div id="projectsList" class="items-list"></div></section>
+</section>
+</main>
+<template id="serviceTemplate"><article class="item"><div class="item-grid"><label>Nome<input data-field="name"></label><label>Ordem<input data-field="display_order" type="number"></label><label class="full">Descrição<textarea data-field="description" rows="3"></textarea></label><label class="check"><input data-field="active" type="checkbox"> Ativo</label></div><div class="item-actions"><button class="primary save-service" type="button">Salvar</button><button class="danger delete-service" type="button">Excluir</button></div></article></template>
+<template id="projectTemplate"><article class="item"><div class="item-grid"><label>Título<input data-field="title"></label><label>Ordem<input data-field="display_order" type="number"></label><label class="full">Descrição<textarea data-field="description" rows="3"></textarea></label><label class="full">URL da imagem<input data-field="image_url" type="url"></label><label class="check"><input data-field="active" type="checkbox"> Ativo</label></div><div class="item-actions"><button class="primary save-project" type="button">Salvar</button><button class="danger delete-project" type="button">Excluir</button></div></article></template>
+</body></html>
